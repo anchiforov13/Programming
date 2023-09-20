@@ -25,7 +25,10 @@ class LinkedList:
             data = int(input("Enter the element: "))
             self.append(data)
 
-    def generate_random(self, a, b, n):
+    def generate_random(self):
+        a = int(input("Enter the start of the range: "))
+        b = int(input("Enter the end of the range: "))
+        n = int(input("Enter the number of elements to generate: "))
         for _ in range(n):
             data = random.randint(a, b)
             self.append(data)
@@ -71,24 +74,30 @@ class LinkedList:
             current = current.next
         print("None")
 
+    def calculate_product_before_last_positive(self):
+        product = 1
+        last_positive_index = -1
+        current = self.head
+        index = 0
+
+        while current:
+            if current.data > 0:
+                last_positive_index = index
+            if index < last_positive_index or last_positive_index == -1:
+                product *= current.data
+            current = current.next
+            index += 1
+
+        if last_positive_index == -1:
+            print("У списку немає жодного додатнього елемента.")
+            return None
+
+        return product
+
+
 if __name__ == "__main__":
     linked_list = LinkedList()
-
-    print("1. Entering the elements:")
     linked_list.input_from_keyboard()
     linked_list.display()
-
-    print("\n2. Generating random elements from range [a, b]:")
-    linked_list.generate_random(1, 10, 5)
-    linked_list.display()
-
-    print("\n3. Adding element to position k:")
-    data = int(input("Enter element to add: "))
-    k = int(input("Enter the position: "))
-    linked_list.insert_at_position(data, k)
-    linked_list.display()
-
-    print("\n4. Deleting element from position k:")
-    k = int(input("Enter position to delete: "))
-    linked_list.delete_at_position(k)
-    linked_list.display()
+    res = linked_list.calculate_product_before_last_positive()
+    print(f"The result is {res}")
