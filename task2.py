@@ -75,25 +75,26 @@ class LinkedList:
         print("None")
 
     def calculate_product_before_last_positive(self):
-        product = 1
-        last_positive_index = -1
-        current = self.head
+        lastPosIndex = -1
         index = 0
-
+        current = self.head
+        product = 1
         while current:
             if current.data > 0:
-                last_positive_index = index
-            if index < last_positive_index or last_positive_index == -1:
-                product *= current.data
+                lastPosIndex = index
             current = current.next
             index += 1
 
-        if last_positive_index == -1:
-            print("У списку немає жодного додатнього елемента.")
+        if lastPosIndex == -1:
+            print("The list has no positive elements.")
             return None
 
+        current = self.head
+        for i in range(lastPosIndex):
+            product *= current.data
+            current = current.next
+        
         return product
-
 
 if __name__ == "__main__":
     linked_list = LinkedList()
