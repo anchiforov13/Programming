@@ -19,13 +19,13 @@ class LinkedList:
             current = current.next
         current.next = new_node
 
-    def input_from_keyboard(self):
+    def input_list(self):
         n = int(input("Enter the number of elements: "))
         for _ in range(n):
             data = int(input("Enter the element: "))
             self.append(data)
 
-    def generate_random(self):
+    def generate_list(self):
         a = int(input("Enter the start of the range: "))
         b = int(input("Enter the end of the range: "))
         n = int(input("Enter the number of elements to generate: "))
@@ -33,7 +33,7 @@ class LinkedList:
             data = random.randint(a, b)
             self.append(data)
 
-    def insert_at_position(self, data, k):
+    def insert(self, data, k):
         new_node = Node(data)
         if k == 0:
             new_node.next = self.head
@@ -50,7 +50,7 @@ class LinkedList:
             new_node.next = current.next
             current.next = new_node
 
-    def delete_at_position(self, k):
+    def delete(self, k):
         if k == 0:
             if self.head:
                 self.head = self.head.next
@@ -74,7 +74,7 @@ class LinkedList:
             current = current.next
         print("None")
 
-    def calculate_product_before_last_positive(self):
+    def calculate(self):
         lastPosIndex = -1
         index = 0
         current = self.head
@@ -98,7 +98,7 @@ class LinkedList:
 
 if __name__ == "__main__":
     linked_list = LinkedList()
-    linked_list.input_from_keyboard()
+    linked_list.input_list()
     linked_list.display()
-    res = linked_list.calculate_product_before_last_positive()
+    res = linked_list.calculate()
     print(f"The result is {res}")
