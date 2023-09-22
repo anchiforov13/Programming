@@ -1,4 +1,5 @@
 import random
+from int_validation import int_validity
 
 class Node:
     def __init__(self, data):
@@ -19,11 +20,17 @@ class LinkedList:
             current = current.next
         current.next = new_node
 
+    def validity_check(self, some_string):
+            return int_validity(some_string)
+
     def input_list(self):
         n = int(input("Enter the number of elements: "))
         for _ in range(n):
-            data = int(input("Enter the element: "))
-            self.append(data)
+            data = (input("Enter the element: "))
+            if self.validity_check(data):
+                self.append(int(data))
+            else:
+                print("Invalid input. Please enter integer values.")
 
     def generate_list(self):
         a = int(input("Enter the start of the range: "))
