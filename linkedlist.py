@@ -24,15 +24,21 @@ class LinkedList:
             return int_validity(some_string)
 
     def input_list(self):
-        n = int(input("Enter the number of elements to add: "))
-        i = 0
-        while i < n:
-            data = (input("Enter the element: "))
-            if self.validity_check(data):
-                self.append(int(data))
-                i += 1
-            else:
-                print("Invalid input. Please enter integer values.")
+        while True:
+            n = input("Enter the number of elements to add: ")
+            if not self.validity_check(n) or int(n) < 0:
+                print("Error. The number of elements has to be a positive integer.")
+                continue
+            n = int(n)
+            i = 0
+            while i < n:
+                data = (input("Enter the element: "))
+                if self.validity_check(data):
+                    self.append(int(data))
+                    i += 1
+                else:
+                    print("Invalid input. Please enter integer values.")
+            break
 
     def generate_list(self):
         while True:
@@ -41,6 +47,12 @@ class LinkedList:
             n = input("Enter the number of elements to generate: ")
             if not self.validity_check(a) or not self.validity_check(b) or not self.validity_check(n):
                 print("Invalid input. Please enter integer values.")
+                continue
+            if int(b) < int(a): 
+                print("Error. The start of range should be less than the end of range.")
+                continue
+            if int(n) < 0:
+                print("Error. The number of elements has to be a positive integer.")
                 continue
             a, b, n = int(a), int(b), int(n)
             for _ in range(n):
@@ -74,7 +86,7 @@ class LinkedList:
                 current = current.next
                 count += 1
 
-            if current is None:
+            if current is None or k < 0:
                 print("Error. Current position does not exist in the list.")
                 continue
             else:
