@@ -1,34 +1,26 @@
 import re
 from datetime import datetime
-from int_validation import int_validity, positive_int_validity, float_validity, positive_float_validity
+from int_validation import positive_float_validity
 
 class Validator:
     @staticmethod
-    def is_valid_age(age):
-        if positive_int_validity(age):
-            if 0 <= int(age) <= 100:
-                return True
-            else:
-                print("Make sure that the age is in the range [0; 100]")
-                return False
-        else:
-            return False
-
-    @staticmethod
     def is_valid_name(name):
-        if not bool(re.match("^[a-zA-Z\s]+$", name)):
+        pattern = "^[a-zA-Z]+$"
+        if re.match(pattern, name):
+            return True
+        else:
             print("The name should only contain letters of the alphabet")
             return False
-        else:
-            return True
 
     @staticmethod
     def is_valid_code(code):
-        if not bool(re.match("^[0-9*/*-**]+$", code)):
+        pattern = r"^\w{5}/\w-\w{2}$"
+    
+        if re.match(pattern, code):
+            return True
+        else:
             print("Error. The code should be in the correct format")
             return False
-        else:
-            return True
 
     @staticmethod
     def is_valid_material(material):
@@ -48,7 +40,12 @@ class Validator:
 
     @staticmethod
     def is_valid_price(price):
-        return positive_float_validity(price)
+        pattern = r"^\d+\.\d{2}$"
+        if positive_float_validity(price) and re.match(pattern, price):
+            return True
+        else:
+            print("Please enter a valid price")
+            return False
     
     @staticmethod
     def is_valid_date(date_str):

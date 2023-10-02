@@ -1,5 +1,6 @@
 from validation import Validator
 from jewelry import Jewelry, JewelryCollection, read_collection_from_file, save_collection_to_file
+from int_validation import positive_int_validity
 
 def menu():
     while True:
@@ -8,12 +9,27 @@ def menu():
             case "1":
                 while True:
                     ID = input("Enter ID: ")
+                    if not positive_int_validity(ID):
+                        continue
                     title = input("Enter title: ")
+                    if not Validator.is_valid_name(title):
+                        continue
                     code = input("Enter code: ")
+                    if not Validator.is_valid_code(code):
+                        continue
                     material = input("Enter material (gold/silver/platinum): ")
+                    if not Validator.is_valid_material(material):
+                        continue
                     jewelry_type = input("Enter type (rings/earrings/bracelets): ")
+                    if not Validator.is_valid_type(jewelry_type):
+                        continue
                     date_of_creation = input("Enter date of creation: ")
-                    price = float(input("Enter price: "))
+                    if not Validator.is_valid_date(date_of_creation):
+                        continue
+                    price = input("Enter price: ")
+                    if not Validator.is_valid_price(price):
+                        continue
+                    price = float(price)
 
                     if Validator.is_valid_age(ID) and Validator.is_valid_name(title) and Validator.is_valid_code(code) and Validator.is_valid_material(material) and Validator.is_valid_type(jewelry_type) and Validator.is_valid_name(date_of_creation) and Validator.is_valid_price(price):
                         new_jewelry = Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
@@ -33,21 +49,33 @@ def menu():
                     print("ID not found.")
 
             case "3":
-                ID = input("Enter jewelry ID to edit: ")
-                title = input("Enter new title: ")
-                code = input("Enter new code: ")
-                material = input("Enter new material (gold/silver/platinum): ")
-                jewelry_type = input("Enter new type (rings/earrings/bracelets): ")
-                date_of_creation = input("Enter new date of creation: ")
-                price = float(input("Enter new price: "))
+                while True:
+                    ID = input("Enter jewelry ID to edit: ")
+                    title = input("Enter new title: ")
+                    if not Validator.is_valid_name(title):
+                        continue
+                    code = input("Enter new code: ")
+                    if not Validator.is_valid_code(code):
+                        continue
+                    material = input("Enter new material (gold/silver/platinum): ")
+                    if not Validator.is_valid_material(material):
+                        continue
+                    jewelry_type = input("Enter new type (rings/earrings/bracelets): ")
+                    if not Validator.is_valid_type(jewelry_type):
+                        continue
+                    date_of_creation = input("Enter new date of creation: ")
+                    if not Validator.is_valid_date(date_of_creation):
+                        continue
+                    price = input("Enter new price: ")
+                    if not Validator.is_valid_price(price):
+                        continue
+                    price = float(price)
 
-                if Validator.is_valid_age(ID) and Validator.is_valid_name(title) and Validator.is_valid_code(code) and Validator.is_valid_material(material) and Validator.is_valid_type(jewelry_type) and Validator.is_valid_name(date_of_creation) and Validator.is_valid_price(price):
                     new_jewelry_data = Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
                     jewelry_collection.edit_jewelry_by_id(ID, new_jewelry_data)
                     save_collection_to_file(filename, jewelry_collection)
                     print(f"Item with ID {ID} has been modified.")
-                else:
-                    continue
+                    break
 
             case "4":
                 query = input("Enter keyword for search: ")

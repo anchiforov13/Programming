@@ -38,7 +38,7 @@ class JewelryCollection:
     def search_jewelry(self, query):
         results = []
         for jewelry in self.collection:
-            if query in str(jewelry):
+            if query.lower() in jewelry.title.lower() or query.lower() in jewelry.code.lower() or query.lower() in jewelry.material.lower() or query.lower() in jewelry.jewelry_type.lower():
                 results.append(jewelry)
         return results
 
