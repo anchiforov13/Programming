@@ -1,8 +1,13 @@
 from validation import Validator
-from jewelry import Jewelry, JewelryCollection, read_collection_from_file, save_collection_to_file
+from jewelry import Jewelry, read_collection_from_file, save_collection_to_file
 from int_validation import positive_int_validity
 
 def menu():
+    while True:
+        filename = input("Enter the file name: ")
+        jewelry_collection = read_collection_from_file(filename)
+        if jewelry_collection is not None:
+            break
     while True:
         p = input("\n1 to enter a new item, 2 to delete by ID, 3 to edit by ID, 4 to search with key, 5 to sort, 6 to show collection, 0 to exit: ")
         match(p):
@@ -31,13 +36,10 @@ def menu():
                         continue
                     price = float(price)
 
-                    if Validator.is_valid_age(ID) and Validator.is_valid_name(title) and Validator.is_valid_code(code) and Validator.is_valid_material(material) and Validator.is_valid_type(jewelry_type) and Validator.is_valid_name(date_of_creation) and Validator.is_valid_price(price):
-                        new_jewelry = Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
-                        jewelry_collection.add_jewelry(new_jewelry)
-                        save_collection_to_file(filename, jewelry_collection)
-                        print("Item added successfully.")
-                    else:
-                        continue
+                    new_jewelry = Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
+                    jewelry_collection.add_jewelry(new_jewelry)
+                    save_collection_to_file(filename, jewelry_collection)
+                    print("Item added successfully.")
                     break
 
             case "2":
@@ -89,7 +91,7 @@ def menu():
 
             case "5":
                 while True:
-                    sort_choice = input("1 to sort by ID, 2 — title, 3 — material, 4 — type, 5 — date of creation, 6 — price")
+                    sort_choice = input("1 to sort by ID, 2 — title, 3 — material, 4 — type, 5 — date of creation, 6 — price ")
                     key = None
                     
                     match(sort_choice):
@@ -122,6 +124,4 @@ def menu():
                 print("Error. Please enter a valid option.")
 
 if __name__ == "__main__":
-    filename = "jewelry_collection.txt"
-    jewelry_collection = read_collection_from_file(filename)
     menu()

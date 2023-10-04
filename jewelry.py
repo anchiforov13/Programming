@@ -1,16 +1,81 @@
+from validation import Validator
+from int_validation import positive_int_validity
 class Jewelry:
     def __init__(self, ID, title, code, material, jewelry_type, date_of_creation, price):
-        self.ID = ID
-        self.title = title
-        self.code = code
-        self.material = material
-        self.jewelry_type = jewelry_type
-        self.date_of_creation = date_of_creation
-        self.price = price
+        self._ID = ID
+        self._title = title
+        self._code = code
+        self._material = material
+        self._jewelry_type = jewelry_type
+        self._date_of_creation = date_of_creation
+        self._price = price
+
+    @property
+    def ID(self):
+        return self._ID
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def code(self):
+        return self._code
+
+    @property
+    def material(self):
+        return self._material
+
+    @property
+    def jewelry_type(self):
+        return self._jewelry_type
+
+    @property
+    def date_of_creation(self):
+        return self._date_of_creation
+
+    @property
+    def price(self):
+        return self._price
+    
+    @ID.setter
+    def ID(self, value):
+        if positive_int_validity(value):
+            self._ID = value
+
+    @title.setter
+    def title(self, value):
+        if Validator.is_valid_name(value):
+            self._title = value
+
+    @code.setter
+    def code(self, value):
+        if Validator.is_valid_code(value):
+            self._code = value
+
+    @material.setter
+    def material(self, value):
+        if Validator.is_valid_material(value):
+            self._material = value
+
+    @jewelry_type.setter
+    def jewelry_type(self, value):
+        if Validator.is_valid_type(value):
+            self._jewelry_type = value
+
+    @date_of_creation.setter
+    def date_of_creation(self, value):
+        if Validator.is_valid_date(value):
+            self._date_of_creation = value
+
+    @price.setter
+    def price(self, value):
+        if Validator.is_valid_price(value):
+            self._price = value
 
     def __str__(self):
-        return f"ID: {self.ID}, Title: {self.title}, Code: {self.code}, Material: {self.material}, " \
-               f"Type: {self.jewelry_type}, Date of Creation: {self.date_of_creation}, Price: {self.price}"
+        return f"ID: {self._ID}, Title: {self._title}, Code: {self._code}, Material: {self._material}, " \
+               f"Type: {self._jewelry_type}, Date of Creation: {self._date_of_creation}, Price: {self._price}"
 
 class JewelryCollection:
     def __init__(self):
@@ -60,6 +125,7 @@ def read_collection_from_file(filename):
                 collection.add_jewelry(jewelry)
     except FileNotFoundError:
         print(f"File '{filename}' not found.")
+        return None
     return collection
 
 def save_collection_to_file(filename, collection):
