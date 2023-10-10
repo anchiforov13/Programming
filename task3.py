@@ -14,7 +14,7 @@ def menu():
             case "1":
                 while True:
                     ID = input("Enter ID: ")
-                    if not positive_int_validity(ID):
+                    if not Validator.is_valid_id(ID):
                         continue
                     title = input("Enter title: ")
                     if not Validator.is_valid_name(title):

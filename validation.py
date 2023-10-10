@@ -1,54 +1,65 @@
 import re
 from datetime import datetime
-from int_validation import positive_float_validity
+from int_validation import positive_float_validity, positive_int_validity
 
-class Validator:
-    @staticmethod
-    def is_valid_name(name):
+def validate_id(func):
+    def wrapper(id):
+        if positive_int_validity(id):
+            return func(id)
+        else:
+            print("The ID should be a positive integer")
+            return False
+    return wrapper
+
+def validate_name(func):
+    def wrapper(name):
         pattern = "^[a-zA-Z]+$"
         if re.match(pattern, name.strip()):
-            return True
+            return func(name)
         else:
             print("The name should only contain letters of the alphabet")
             return False
+    return wrapper
 
-    @staticmethod
-    def is_valid_code(code):
+def validate_code(func):
+    def wrapper(code):
         pattern = r"^\w{5}/\w-\w{2}$"
-    
         if re.match(pattern, code):
-            return True
+            return func(code)
         else:
             print("Error. The code should be in the correct format")
             return False
+    return wrapper
 
-    @staticmethod
-    def is_valid_material(material):
+def validate_material(func):
+    def wrapper(material):
         if not material in ["gold", "silver", "platinum"]:
             print("Invalid material option")
             return False
         else:
-            return True
+            return func(material)
+    return wrapper
 
-    @staticmethod
-    def is_valid_type(jewelry_type):
-       if not jewelry_type in ["rings", "earrings", "bracelets"]:
-           print("Invalid type of jewelry")
-           return False
-       else:
-           return True
+def validate_type(func):
+    def wrapper(jewelry_type):
+        if not jewelry_type in ["rings", "earrings", "bracelets"]:
+            print("Invalid type of jewelry")
+            return False
+        else:
+            return func(jewelry_type)
+    return wrapper
 
-    @staticmethod
-    def is_valid_price(price):
+def validate_price(func):
+    def wrapper(price):
         pattern = r"^\d+\.\d{2}$"
         if positive_float_validity(price) and re.match(pattern, price):
-            return True
+            return func(price)
         else:
-            print("Please enter a valid price")
             return False
-    
-    @staticmethod
-    def is_valid_date(date_str):
+    return wrapper
+
+def validate_date(func):
+    def wrapper(date_str):
         try:
             date_format = "%Y-%m-%d"  
             date = datetime.strptime(date_str, date_format)
@@ -73,7 +84,44 @@ class Validator:
                 print("Invalid date.")
                 return False
 
-            return True
+            return func(date_str)
         except ValueError:
             print("Please enter the date in the correct format.")
             return False
+    return wrapper
+
+class Validator:
+    @staticmethod
+    @validate_id
+    def is_valid_id(id):
+        return True
+
+    @staticmethod
+    @validate_name
+    def is_valid_name(name):
+        return True
+
+    @staticmethod
+    @validate_code
+    def is_valid_code(code):
+        return True
+
+    @staticmethod
+    @validate_material
+    def is_valid_material(material):
+        return True
+
+    @staticmethod
+    @validate_type
+    def is_valid_type(jewelry_type):
+       return True
+
+    @staticmethod
+    @validate_price
+    def is_valid_price(price):
+        return True
+    
+    @staticmethod
+    @validate_date
+    def is_valid_date(date_str):
+        return True
