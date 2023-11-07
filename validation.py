@@ -52,7 +52,7 @@ def validate_type(func):
 def validate_price(func):
     def wrapper(price):
         pattern = r"^\d+\.\d{2}$"
-        if positive_float_validity(price) and re.match(pattern, price):
+        if positive_float_validity(price) and re.match(pattern, str(price)):
             return func(price)
         else:
             return False
