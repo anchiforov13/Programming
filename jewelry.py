@@ -92,19 +92,18 @@ class JewelryCollection:
     def edit_jewelry_by_id(self, ID, new_jewelry_data):
         for jewelry in self.collection:
             if jewelry.ID == ID:
-                jewelry.title = new_jewelry_data.title
-                jewelry.code = new_jewelry_data.code
-                jewelry.material = new_jewelry_data.material
-                jewelry.jewelry_type = new_jewelry_data.jewelry_type
-                jewelry.date_of_creation = new_jewelry_data.date_of_creation
-                jewelry.price = new_jewelry_data.price
+                for attr, val in new_jewelry_data.__dict__.items():
+                    setattr(jewelry, attr[1:], val)
 
     def search_jewelry(self, query):
         results = []
         for jewelry in self.collection:
-            if query.lower() in jewelry.title.lower() or query.lower() in jewelry.code.lower() or query.lower() in jewelry.material.lower() or query.lower() in jewelry.jewelry_type.lower():
-                results.append(jewelry)
+            for attr, val in jewelry.__dict__.items():
+                if query.lower() in str(val).lower():
+                    results.append(jewelry)
+                    break
         return results
+
 
     def sort_jewelry(self, key):
         self.collection.sort(key=key)
