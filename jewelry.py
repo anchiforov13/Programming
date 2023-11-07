@@ -78,8 +78,7 @@ class Jewelry:
             self._price = value
 
     def __str__(self):
-        return f"ID: {self._ID}, Title: {self._title}, Code: {self._code}, Material: {self._material}, " \
-               f"Type: {self._jewelry_type}, Date of Creation: {self._date_of_creation}, Price: {self._price}"
+        return ", ".join([f"{attr}: {val}" for attr, val in self.__dict__.items()])
     
     @property
     def state(self):
@@ -112,18 +111,16 @@ class JewelryCollection:
         for jewelry in self.collection:
             if jewelry.ID == ID:
                 self.collection_history[ID].save()
-                jewelry.title = new_jewelry_data.title or jewelry.title
-                jewelry.code = new_jewelry_data.code or jewelry.code
-                jewelry.material = new_jewelry_data.material or jewelry.material
-                jewelry.jewelry_type = new_jewelry_data.jewelry_type or jewelry.jewelry_type
-                jewelry.date_of_creation = new_jewelry_data.date_of_creation or jewelry.date_of_creation
-                jewelry.price = new_jewelry_data.price or jewelry.price
+                for attr, val in new_jewelry_data.__dict__.items():
+                    setattr(jewelry, attr[1:], val)
 
     def search_jewelry(self, query):
         results = []
         for jewelry in self.collection:
-            if query.lower() in jewelry.title.lower() or query.lower() in jewelry.code.lower() or query.lower() in jewelry.material.lower() or query.lower() in jewelry.jewelry_type.lower():
-                results.append(jewelry)
+            for attr, val in jewelry.__dict__.items():
+                if query.lower() in str(val).lower():
+                    results.append(jewelry)
+                    break
         return results
 
     def sort_jewelry(self, key):
