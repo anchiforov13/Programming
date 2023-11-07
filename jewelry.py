@@ -74,8 +74,7 @@ class Jewelry:
             self._price = value
 
     def __str__(self):
-        return f"ID: {self._ID}, Title: {self._title}, Code: {self._code}, Material: {self._material}, " \
-               f"Type: {self._jewelry_type}, Date of Creation: {self._date_of_creation}, Price: {self._price}"
+        return ", ".join([f"{attr}: {val}" for attr, val in self.__dict__.items()])
 
 class JewelryCollection:
     def __init__(self):
