@@ -137,14 +137,20 @@ class JewelryCollection:
         return self.collection[item]
     
     def revert_jewelry_by_id(self, jewelry_id):
-        version_index = input("How many versions to go back? ")
-        for jewelry in self.collection:
-            if jewelry.ID == jewelry_id:
-                jewelry_history = self.collection_history[jewelry_id]
-                if version_index:
-                    jewelry_history.redo(int(version_index))
-                else:
-                    jewelry_history.undo()
+        while True:
+            version_index = input("How many versions to go back? ")
+            if version_index == '' or positive_int_validity(version_index):
+                for jewelry in self.collection:
+                    if jewelry.ID == jewelry_id:
+                        jewelry_history = self.collection_history[jewelry_id]
+                        if version_index:
+                            jewelry_history.redo(int(version_index))
+                        else:
+                            jewelry_history.undo()
+            else:
+                print("Please enter an integer. ")
+                continue
+            break
 
 def read_collection_from_file(filename):
     collection = JewelryCollection()
@@ -197,6 +203,8 @@ class JewelryHistory:
     def redo(self, ind):
         if not self.history:
             print("This item has no history.")
+        elif ind > len(self.history):
+            print("Version not found.")
         else:
             snapshot = self.history.pop(-1*ind)
             self.jewelry.restore(snapshot)
