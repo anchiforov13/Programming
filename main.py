@@ -25,7 +25,7 @@ while True:
     try:
         tower_height = int(input("Enter an integer height: "))
         res = count_all_ways(tower_height)
-        print(f"Number of ways to make a tower of height {tower_height} : {res}")
+        print(f"Number of ways to make a tower of height {tower_height} : {2*res}")
         break
     except ValueError:
         print("Invalid input. Please make the height an integer value.")
