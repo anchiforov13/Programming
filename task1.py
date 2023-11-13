@@ -24,7 +24,7 @@ def count_ways(height):
 while True:
     try:
         height = int(input("Enter an integer height: "))
-        result = count_ways(height)
+        result = 2*count_ways(height)
         print(f"Number of ways to make a tower of height {height} : {result}")
         break
     except ValueError:
