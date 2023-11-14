@@ -1,6 +1,5 @@
-from validation import Validator
-from jewelry import Jewelry, read_collection_from_file, save_collection_to_file
-from int_validation import positive_int_validity, positive_float_validity
+from jewelry import read_collection_from_file, save_collection_to_file, input_jewelry
+from int_validation import positive_int_validity
 
 def menu():
     while True:
@@ -13,42 +12,11 @@ def menu():
             "\n1 to enter a new item, 2 to delete by ID, 3 to edit by ID, 4 to search with key, 5 to sort, 6 to show collection, 7 to undo/redo, 0 to exit: ")
         match (p):
             case "1":
-                while True:
-                    ID = input("Enter ID: ")
-                    if not positive_int_validity(ID):
-                        continue
-                    title = input("Enter title: ")
-                    if not Validator.is_valid_by_regex(
-                            title, "^[a-zA-Z\s]+$", "The name should only contain letters of the alphabet"):
-                        continue
-                    code = input("Enter code: ")
-                    if not Validator.is_valid_by_regex(
-                            code, r"^\w{5}/\w-\w{2}$", "Error. The code should be in the correct format"):
-                        continue
-                    material = input("Enter material (gold/silver/platinum): ")
-                    if not Validator.is_valid_by_being_in_group(
-                            material.lower(), ["gold", "silver", "platinum"], "Invalid material option"):
-                        continue
-                    jewelry_type = input("Enter type (rings/earrings/bracelets): ")
-                    if not Validator.is_valid_by_being_in_group(
-                            jewelry_type.lower(), ["rings", "earrings", "bracelets"], "Invalid type of jewelry"):
-                        continue
-                    date_of_creation = input("Enter date of creation: ")
-                    if not Validator.is_valid_date(date_of_creation):
-                        continue
-                    price = input("Enter price: ")
-                    if not (Validator.is_valid_by_regex(
-                            price, r"^\d+\.\d{2}$", "Please enter a valid price") and
-                            positive_float_validity(price)):
-                        continue
-                    price = float(price)
- 
-                    new_jewelry = Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
-                    jewelry_collection.add_jewelry(new_jewelry)
-                    save_collection_to_file(filename, jewelry_collection)
-                    print("Item added successfully.")
-                    break
- 
+                    new_jewelry = input_jewelry()
+                    if jewelry_collection.add_jewelry(new_jewelry):
+                        save_collection_to_file(filename, jewelry_collection)
+                        print("Item added successfully.")
+                        
             case "2":
                 ID = input("Enter jewelry ID to delete: ")
                 if jewelry_collection.remove_jewelry_by_id(ID):
@@ -59,39 +27,14 @@ def menu():
  
             case "3":
                 while True:
-                    ID = input("Enter jewelry ID to edit: ")
-                    title = input("Enter title: ")
-                    if title and not Validator.is_valid_by_regex(
-                            title, "^[a-zA-Z\s]+$", "The name should only contain letters of the alphabet"):
-                        continue
-                    code = input("Enter code: ")
-                    if code and not Validator.is_valid_by_regex(
-                            code, r"^\w{5}/\w-\w{2}$", "Error. The code should be in the correct format"):
-                        continue
-                    material = input("Enter material (gold/silver/platinum): ")
-                    if material and not Validator.is_valid_by_being_in_group(
-                            material.lower(), ["gold", "silver", "platinum"], "Invalid material option"):
-                        continue
-                    jewelry_type = input("Enter type (rings/earrings/bracelets): ")
-                    if jewelry_type and not Validator.is_valid_by_being_in_group(
-                            jewelry_type.lower(), ["rings", "earrings", "bracelets"], "Invalid type of jewelry"):
-                        continue
-                    date_of_creation = input("Enter date of creation: ")
-                    if date_of_creation and not Validator.is_valid_date(date_of_creation):
-                        continue
-                    price = input("Enter price: ")
-                    if price:
-                        if not (Validator.is_valid_by_regex(
-                                price, r"^\d+\.\d{2}$", "Please enter a valid price") and
-                                positive_float_validity(price)):
-                            continue
-                        price = float(price)
- 
-                    new_jewelry_data = Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
-                    jewelry_collection.edit_jewelry_by_id(ID, new_jewelry_data)
-                    save_collection_to_file(filename, jewelry_collection)
-                    print(f"Item with ID {ID} has been modified.")
-                    break
+                    new_jewelry_data = input_jewelry()
+                    edit_id = new_jewelry_data.ID
+                    if jewelry_collection.edit_jewelry_by_id(edit_id, new_jewelry_data):
+                        save_collection_to_file(filename, jewelry_collection)
+                        print(f"Item with ID {edit_id} has been modified.")
+                        break
+                    else:
+                        print("ID not found.")
  
             case "4":
                 query = input("Enter keyword for search: ")
