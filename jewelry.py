@@ -1,6 +1,7 @@
-import copy
 from validation import *
 from int_validation import positive_int_validity, positive_float_validity
+from jewelry_history import JewelryHistory
+from snapshot import SnapShot
 class Jewelry:
     def __init__(self, ID, title, code, material, jewelry_type, date_of_creation, price):
         self._ID = ID
@@ -129,8 +130,22 @@ class JewelryCollection:
                     break
         return results
 
-    def sort_jewelry(self, key):
-        self.collection.sort(key=key)
+    def sort_jewelry(self, sort_choice):
+        sort_mapping = {
+            "1": lambda x: x.ID,
+            "2": lambda x: x.title,
+            "3": lambda x: x.material,
+            "4": lambda x: x.jewelry_type,
+            "5": lambda x: x.date_of_creation,
+            "6": lambda x: x.price,
+        }
+
+        key = sort_mapping.get(sort_choice)
+        if key:
+            self.collection.sort(key=key)
+            print("Collection sorted by given key")
+        else:
+            print("Error. Please enter a valid option.")
 
     def display_collection(self):
         for jewelry in self.collection:
@@ -158,43 +173,8 @@ class JewelryCollection:
                 continue
             break
 
-def input_jewelry():
-        while True:
-            ID = input("Enter ID: ")
-            if not positive_int_validity(ID):
-                continue
-            title = input("Enter title: ")
-            if not Validator.is_valid_by_regex(
-                    title, "^[a-zA-Z\s]+$", "The name should only contain letters of the alphabet"):
-                continue
-            code = input("Enter code: ")
-            if not Validator.is_valid_by_regex(
-                    code, r"^\w{5}/\w-\w{2}$", "Error. The code should be in the correct format"):
-                continue
-            material = input("Enter material (gold/silver/platinum): ")
-            if not Validator.is_valid_by_being_in_group(
-                    material.lower(), ["gold", "silver", "platinum"], "Invalid material option"):
-                continue
-            jewelry_type = input("Enter type (rings/earrings/bracelets): ")
-            if not Validator.is_valid_by_being_in_group(
-                    jewelry_type.lower(), ["rings", "earrings", "bracelets"], "Invalid type of jewelry"):
-                continue
-            date_of_creation = input("Enter date of creation: ")
-            if not Validator.is_valid_date(date_of_creation):
-                continue
-            price = input("Enter price: ")
-            if not (Validator.is_valid_by_regex(
-                    price, r"^\d+\.\d{2}$", "Please enter a valid price") and
-                    positive_float_validity(price)):
-                continue
-            price = float(price)
-            break
-        return Jewelry(ID, title, code, material, jewelry_type, date_of_creation, price)
-
-def read_collection_from_file(filename):
-    collection = JewelryCollection()
-    
-    attribute_validators = {
+def get_attribute_validators(): 
+    return {
         "ID": positive_int_validity,
         "title": lambda value: Validator.is_valid_by_regex(value, r"^[a-zA-Z\s]+$", "The name should only contain letters of the alphabet"),
         "code": lambda value: Validator.is_valid_by_regex(value, r"^\w{5}/\w-\w{2}$", "Error. The code should be in the correct format"),
@@ -204,6 +184,20 @@ def read_collection_from_file(filename):
         "price": lambda value: Validator.is_valid_by_regex(value, r"^\d+\.\d[1-9]?$", "Please enter a valid price") and positive_float_validity(value),
     }
 
+def input_jewelry():
+    jewelry_data = {}
+    attribute_validators = get_attribute_validators()
+    for attribute, validator in attribute_validators.items():
+        while True:
+            value = input(f"Enter {attribute}: ")
+            if validator(value):
+                jewelry_data[attribute] = value
+                break
+    return Jewelry(**jewelry_data)
+
+def read_collection_from_file(filename):
+    collection = JewelryCollection()
+    attribute_validators = get_attribute_validators()
     try:
         with open(filename) as file:
             for line in file:
@@ -232,40 +226,3 @@ def save_collection_to_file(filename, collection):
                 if i < len(jewelry.__dict__) - 1:
                     file.write(',')
             file.write('\n')
-
-class SnapShot:
-    def __init__(self, state):
-        self.state = copy.deepcopy(state)
- 
-    def get_state(self):
-        return self.state
- 
- 
-class JewelryHistory:
-    MAX_LENGTH = 100
- 
-    def __init__(self, jewelry):
-        self.jewelry = jewelry
-        self.history = []
- 
-    def save(self):
-        snapshot = self.jewelry.save()
-        self.history.append(snapshot)
-        if len(self.history) > JewelryHistory.MAX_LENGTH:
-            self.history.pop(0)
-
-    def undo(self):
-        if not self.history:
-            print("This item has no history.")
-        else:
-            snapshot = self.history.pop()
-            self.jewelry.restore(snapshot)
- 
-    def redo(self, ind):
-        if not self.history:
-            print("This item has no history.")
-        elif ind > len(self.history):
-            print("Version not found.")
-        else:
-            snapshot = self.history.pop(-1*ind)
-            self.jewelry.restore(snapshot)

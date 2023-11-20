@@ -47,29 +47,10 @@ def menu():
                     print("No results found.")
  
             case "5":
-                while True:
-                    sort_choice = input(
-                        "1 to sort by ID, 2 — title, 3 — material, 4 — type, 5 — date of creation, 6 — price ")
- 
-                    match sort_choice:
-                        case "1":
-                            key = lambda x: x.ID
-                        case "2":
-                            key = lambda x: x.title
-                        case "3":
-                            key = lambda x: x.material
-                        case "4":
-                            key = lambda x: x.jewelry_type
-                        case "5":
-                            key = lambda x: x.date_of_creation
-                        case "6":
-                            key = lambda x: x.price
-                        case _:
-                            print("Error. Please enter a valid option.")
-                            continue
-                    jewelry_collection.sort_jewelry(key)
-                    print("Collection sorted by given key")
-                    break
+                sort_choice = input(
+                    "1 to sort by ID, 2 — title, 3 — material, 4 — type, 5 — date of creation, 6 — price: ")
+                jewelry_collection.sort_jewelry(sort_choice)
+                save_collection_to_file(filename, jewelry_collection)
  
             case "6":
                 jewelry_collection.display_collection()
