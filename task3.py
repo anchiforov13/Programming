@@ -9,11 +9,11 @@ def menu():
             break
     while True:
         p = input(
-            "\n1 to enter a new item, 2 to delete by ID, 3 to edit by ID, 4 to search with key, 5 to sort, 6 to show collection, 7 to undo/redo, 0 to exit: ")
+            "\n1 to enter a new item, 2 to delete by ID, 3 to edit by ID, 4 to search, 5 to sort, 6 to show collection, 7 to undo/redo item, 8 to undo/redo collection, 0 to exit: ")
         match (p):
             case "1":
                     new_jewelry = input_jewelry()
-                    if jewelry_collection.add_jewelry(new_jewelry):
+                    if jewelry_collection.add_jewelry_manually(new_jewelry):
                         save_collection_to_file(filename, jewelry_collection)
                         print("Item added successfully.")
                         
@@ -64,6 +64,21 @@ def menu():
                     jewelry_collection.revert_jewelry_by_id(jewelry_id)
                     save_collection_to_file(filename, jewelry_collection)
                     break
+
+            case "8":
+                while True:
+                    choice = input("1 to undo, 2 to redo: ")
+                    if choice == "1":
+                        jewelry_collection.undo()
+                        save_collection_to_file(filename, jewelry_collection)
+                        break
+                    elif choice == "2":
+                        jewelry_collection.redo()
+                        save_collection_to_file(filename, jewelry_collection)
+                        break
+                    else:
+                        print("Error. Command not recognized.")
+
             case "0":
                 return
  

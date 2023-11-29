@@ -2,6 +2,7 @@ from validation import *
 from int_validation import positive_int_validity, positive_float_validity
 from jewelry_history import JewelryHistory
 from snapshot import SnapShot
+import copy
 class Jewelry:
     def __init__(self, ID, title, code, material, jewelry_type, date_of_creation, price):
         self._ID = ID
@@ -94,6 +95,8 @@ class JewelryCollection:
     def __init__(self):
         self.collection = []
         self.collection_history = {}
+        self.undo_history = []
+        self.redo_history = []
 
     def add_jewelry(self, jewelry):
         if any(existing_jewelry.ID == jewelry.ID for existing_jewelry in self.collection):
@@ -103,14 +106,35 @@ class JewelryCollection:
             self.collection.append(jewelry)
             self.collection_history[jewelry.ID] = JewelryHistory(jewelry)
         return True
-
+    
+    def add_jewelry_manually(self, jewelry):
+        self.undo_history.append(copy.deepcopy(self.collection))
+        return self.add_jewelry(jewelry)
+            
     def remove_jewelry_by_id(self, ID):
+        self.undo_history.append(copy.deepcopy(self.collection))
         for jewelry in self.collection:
             if jewelry.ID == ID:
                 self.collection.remove(jewelry)
                 del self.collection_history[ID]
                 return True
         return False
+    
+    def undo(self):
+        if not self.undo_history:
+            print("The collection has no history.")
+            return
+        self.redo_history.append(self.collection)
+        self.collection = self.undo_history.pop()
+        print("Action undone.")
+
+    def redo(self):
+        if not self.redo_history:
+            print("The collection has no history.")
+            return
+        self.undo_history.append(self.collection)
+        self.collection = self.redo_history.pop()
+        print("Action redone.")
 
     def edit_jewelry_by_id(self, ID, new_jewelry_data):
         for jewelry in self.collection:
