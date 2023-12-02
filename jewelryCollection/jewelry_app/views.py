@@ -137,7 +137,6 @@ class JewelryDetailView(generics.RetrieveUpdateDestroyAPIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'ID': openapi.Schema(type=openapi.TYPE_INTEGER),
                 'title': openapi.Schema(type=openapi.TYPE_STRING),
                 'code': openapi.Schema(type=openapi.TYPE_STRING),
                 'material': openapi.Schema(type=openapi.TYPE_STRING),
@@ -154,13 +153,14 @@ class JewelryDetailView(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def put(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
         instance = self.get_object()
         try:
             instance = Jewelry.objects.get(ID=instance.ID)
         except Jewelry.DoesNotExist:
             return Response({'status': 'error', 'message': 'Jewelry with the given ID does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = JewelrySerializer(instance, data=request.data, partial=partial)
+        serializer_data = {k: v[0] for k, v in dict(request.data).items()}
+        serializer_data['ID'] = instance.ID
+        serializer = JewelrySerializer(instance, data=serializer_data, partial=False)
         if serializer.is_valid():
             serializer.save()
             return Response({'status': 'success', "data": serializer.data}, status=status.HTTP_200_OK)

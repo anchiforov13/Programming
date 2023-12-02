@@ -81,9 +81,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'jewelrydb',
         'USER': 'anchiforov',
-        'PASSWORD': 'Spookyjim21',
+        'PASSWORD': 'MyNewPass',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        # 'PORT': '3306',
     }
 }
 
@@ -131,7 +131,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
-    'enabled_methods': ['get', 'post', 'put', 'patch', 'delete'],
+    'enabled_methods': ['get', 'post', 'put', 'delete'],
     'SECURITY_DEFINITIONS': {
         'api_key': {
             'type': 'apiKey',
