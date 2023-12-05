@@ -1,0 +1,5 @@
+1,Ruby Bracelet,41789/5-45,Platinum,Bracelets,2023-03-20,1250.75
+2,Excellent Ring,5546h/6-rg,Gold,Rings,2022-12-10,550.5
+3,Antique Earrings,gh56s/0-ub,Silver,Earrings,1955-04-23,4500.0
+4,Delightful Bracelet,thw56/g-56,Gold,Bracelets,2010-03-24,300.0
+5,Sight for sore eyes,55th6/6-yh,Platinum,Earrings,2015-03-12,340.5
